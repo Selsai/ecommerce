@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -24,11 +24,42 @@ function App() {
       });
   }, []);
 
+  const handleAddProduct = () => {
+    const newProduct = {
+      title: 'Produit Test',
+      price: 19.99,
+      description: 'Ceci est un produit de test créé via l\'API.',
+      image: 'https://via.placeholder.com/150', // URL d'une image factice
+      category: 'test',
+    };
+
+    fetch('https://fakestoreapi.com/products', {
+      method: 'POST',
+      body: JSON.stringify(newProduct),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(`Le produit avec l'id ${data.id} a été créé.`);
+        // Optionnel: Recharger la liste des produits pour afficher le nouveau produit
+        // fetchProducts();
+      })
+      .catch(err => {
+        setError(err.message);
+        alert('Erreur lors de la création du produit.');
+      });
+  };
+
   if (loading) return <div className="text-center mt-5">Chargement...</div>;
   if (error) return <div className="text-center mt-5 text-danger">Erreur : {error}</div>;
 
   return (
     <Container className="d-flex flex-column align-items-center my-5">
+      <Button variant="primary" onClick={handleAddProduct} className="mb-3">
+        Ajouter un produit
+      </Button>
       {/* Grille des produits */}
       <Row className="g-4 justify-content-center">
         {products.map(product => (
