@@ -28,27 +28,26 @@ function App() {
 
   return (
     <Container className="d-flex flex-column align-items-center my-5">
-      <h1 className="mb-4 text-center">Nos Produits</h1>
-      <Row xs={1} md={2} lg={3} xl={4} className="g-4 justify-content-center" style={{ maxWidth: '1200px' }}>
+      {/* Grille des produits */}
+      <Row xs={1} md={2} lg={3} xl={4} className="g-4 justify-content-center">
         {products.map(product => (
-          <Col key={product.id} xs={12} sm={6} md={4} lg={3}>
-            <Card className="h-100 shadow-sm d-flex flex-column" style={{ border: 'none' }}>
+          <Col key={product.id}>
+            <Card className="h-100 shadow-sm border-0">
+              {/* Image du produit */}
               <Card.Img 
                 variant="top" 
                 src={product.image} 
-                style={{ 
-                  objectFit: 'contain', 
-                  width: '100%', 
-                  height: '200px',
-                  padding: '10px'
-                }}
+                className="p-3 img-fluid" 
+                style={{ objectFit: 'contain', height: '200px' }}
               />
+              
+              {/* Contenu du produit */}
               <Card.Body className="d-flex flex-column">
-                <Card.Title className="text-center fs-6 fw-bold">{product.title}</Card.Title>
-                <Card.Text className="text-muted text-center" style={{ fontSize: '0.9rem', flexGrow: 1 }}>
+                <Card.Title className="fs-6 fw-bold">{product.title}</Card.Title>
+                <Card.Text className="text-muted flex-grow-1">
                   {product.description.length > 150 ? product.description.substring(0, 150) + '...' : product.description}
                 </Card.Text>
-                <Card.Text className="fw-bold text-center">
+                <Card.Text className="fw-bold">
                   {product.price} €
                 </Card.Text>
               </Card.Body>
