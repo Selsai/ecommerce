@@ -8,23 +8,27 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fonction pour récupérer les produits
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('https://fakestoreapi.com/products');
+      if (!response.ok) throw new Error('Erreur de requête');
+      const data = await response.json();
+      setProducts(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  // Utilisation de useEffect pour charger les produits au montage
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then(res => {
-        if (!res.ok) throw new Error('Erreur de requête');
-        return res.json();
-      })
-      .then(data => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
-      });
+    fetchProducts();
   }, []);
 
-  const handleAddProduct = () => {
+  // Fonction pour ajouter un produit
+  const handleAddProduct = async () => {
     const newProduct = {
       title: 'Produit Test',
       price: 19.99,
@@ -33,23 +37,27 @@ function App() {
       category: 'test',
     };
 
-    fetch('https://fakestoreapi.com/products', {
-      method: 'POST',
-      body: JSON.stringify(newProduct),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert(`Le produit avec l'id ${data.id} a été créé.`);
-        // Optionnel: Recharger la liste des produits pour afficher le nouveau produit
-        // fetchProducts();
-      })
-      .catch(err => {
-        setError(err.message);
-        alert('Erreur lors de la création du produit.');
+    try {
+      const response = await fetch('https://fakestoreapi.com/products', {
+        method: 'POST',
+        body: JSON.stringify(newProduct),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (!response.ok) throw new Error('Erreur lors de la création du produit');
+      
+      const data = await response.json();
+      
+      alert(`Le produit avec l'id ${data.id} a été créé.`);
+      
+      // Optionnel : Recharger la liste des produits après création
+      // await fetchProducts();
+    } catch (err) {
+      setError(err.message);
+      alert('Erreur lors de la création du produit.');
+    }
   };
 
   if (loading) return <div className="text-center mt-5">Chargement...</div>;
@@ -60,6 +68,7 @@ function App() {
       <Button variant="primary" onClick={handleAddProduct} className="mb-3">
         Ajouter un produit
       </Button>
+      
       {/* Grille des produits */}
       <Row className="g-4 justify-content-center">
         {products.map(product => (
