@@ -22,18 +22,46 @@ function App() {
     }
   };
 
-  // Utilisation de useEffect pour charger les produits au montage
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  // Fonction pour modifier complètement un produit
+  const handleAddProduct = async () => {
+    const newProduct = {
+      title: 'Produit Test',
+      price: 19.99,
+      description: 'Ceci est un produit de test créé via l\'API.',
+      image: 'https://via.placeholder.com/150',
+      category: 'test',
+    };
+
+    try {
+      const response = await fetch('https://fakestoreapi.com/products', {
+        method: 'POST',
+        body: JSON.stringify(newProduct),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) throw new Error('Erreur lors de la création du produit');
+      
+      const data = await response.json();
+      
+      alert(`Le produit avec l'id ${data.id} a été créé.`);
+      
+      await fetchProducts();
+    } catch (err) {
+      setError(err.message);
+      alert('Erreur lors de la création du produit.');
+    }
+  };
   const handleUpdateProduct = async (id) => {
     const updatedProduct = {
       title: 'Produit Modifié',
       price: 29.99,
       description: 'Ceci est une description modifiée.',
-      image: 'https://via.placeholder.com/150', // URL d'image factice
+      image: 'https://via.placeholder.com/150', 
       category: 'modifié',
     };
 
@@ -51,6 +79,8 @@ function App() {
       const data = await response.json();
       
       alert(`Le produit avec l'id ${data.id} a été modifié.`);
+      
+      await fetchProducts();
     } catch (err) {
       setError(err.message);
       alert('Erreur lors de la modification du produit.');
@@ -62,6 +92,11 @@ function App() {
 
   return (
     <Container className="d-flex flex-column align-items-center my-5">
+      
+      {/* Bouton Ajouter un produit */}
+      <Button variant="primary" onClick={handleAddProduct} className="mb-3">
+        Ajouter un produit
+      </Button>
       
       {/* Grille des produits */}
       <Row className="g-4 justify-content-center">
@@ -84,7 +119,8 @@ function App() {
                 <Card.Text className="fw-bold">
                   {product.price} €
                 </Card.Text>
-                {/* Bouton Modifier */}
+                
+                {/* Bouton Modifier le produit */}
                 <Button 
                   variant="warning" 
                   onClick={() => handleUpdateProduct(product.id)}
