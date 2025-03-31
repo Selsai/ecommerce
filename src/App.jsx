@@ -10,18 +10,19 @@ function App() {
 
     // Fonction pour récupérer les produits
     const fetchProducts = async () => {
-      try {
-          const response = await fetch('https://fakestoreapi.com/products');
-          if (!response.ok) throw new Error();
-          const data = await response.json();
-          setProducts(data);
-      } catch (err) {
-          setError('Une erreur est survenue lors de la récupération des produits. Veuillez réessayer plus tard.');
-      } finally {
-          setLoading(false);
-      }
-  };
-  
+        try {
+            const response = await fetch('https://fakestoreapi.com/products');
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+            const data = await response.json();
+            setProducts(data);
+        } catch (err) {
+            console.error('Erreur technique lors de la récupération des produits :', err);
+            setError('Une erreur est survenue lors de la récupération des produits. Veuillez réessayer plus tard.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -42,11 +43,12 @@ function App() {
                 body: JSON.stringify(newProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             const data = await response.json();
             alert(`Le produit a été ajouté avec succès.`);
             await fetchProducts();
         } catch (err) {
+            console.error('Erreur technique lors de l’ajout du produit :', err);
             alert('Une erreur est survenue lors de l’ajout du produit. Veuillez réessayer.');
         }
     };
@@ -67,17 +69,18 @@ function App() {
                 body: JSON.stringify(updatedProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             alert(`Le produit a été modifié avec succès.`);
             await fetchProducts();
         } catch (err) {
+            console.error('Erreur technique lors de la modification du produit :', err);
             alert('Une erreur est survenue lors de la modification du produit. Veuillez réessayer.');
         }
     };
 
     // Fonction pour modifier partiellement le prix d'un produit
     const handleUpdatePrice = async (id) => {
-        const updatedProduct = { price: 5 }; // Nouveau prix fixé à 5
+        const updatedProduct = { price: 5 };
 
         try {
             const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
@@ -85,10 +88,11 @@ function App() {
                 body: JSON.stringify(updatedProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             alert(`Le prix du produit a été modifié avec succès.`);
             await fetchProducts();
         } catch (err) {
+            console.error('Erreur technique lors de la modification du prix :', err);
             alert('Une erreur est survenue lors de la modification du prix. Veuillez réessayer.');
         }
     };
@@ -97,10 +101,11 @@ function App() {
     const handleDeleteProduct = async (id) => {
         try {
             const response = await fetch(`https://fakestoreapi.com/products/${id}`, { method: 'DELETE' });
-            if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             alert(`Le produit a été supprimé avec succès.`);
             await fetchProducts();
         } catch (err) {
+            console.error('Erreur technique lors de la suppression du produit :', err);
             alert('Une erreur est survenue lors de la suppression du produit. Veuillez réessayer.');
         }
     };
