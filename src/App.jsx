@@ -30,9 +30,9 @@ function App() {
   return (
     <Container className="d-flex flex-column align-items-center my-5">
       {/* Grille des produits */}
-      <Row xs={1} md={2} lg={3} xl={4} className="g-4 justify-content-center">
+      <Row className="g-4 justify-content-center">
         {products.map(product => (
-          <Col key={product.id}>
+          <Col key={product.id} xs={12} md={6} lg={4} xl={3}>
             <Card className="h-100 shadow-sm border-0">
               {/* Image du produit */}
               <Card.Img 
