@@ -10,18 +10,18 @@ function App() {
 
     // Fonction pour récupérer les produits
     const fetchProducts = async () => {
-        try {
-            const response = await fetch('https://fakestoreapi.com/products');
-            if (!response.ok) throw new Error('Une erreur est survenue lors de la récupération des produits.');
-            const data = await response.json();
-            setProducts(data);
-        } catch (err) {
-            setError('Impossible de récupérer les produits pour le moment. Veuillez réessayer plus tard.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
+      try {
+          const response = await fetch('https://fakestoreapi.com/products');
+          if (!response.ok) throw new Error();
+          const data = await response.json();
+          setProducts(data);
+      } catch (err) {
+          setError('Une erreur est survenue lors de la récupération des produits. Veuillez réessayer plus tard.');
+      } finally {
+          setLoading(false);
+      }
+  };
+  
     useEffect(() => {
         fetchProducts();
     }, []);
