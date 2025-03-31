@@ -2,16 +2,3 @@
   object-fit: contain;
   height: 200px;
 }
-
-.product-title {
-  text-align: left; 
-}
-
-.product-description {
-  text-align: left; 
-  font-size: 0.9rem;
-}
-
-.product-price {
-  text-align: left;
-}
