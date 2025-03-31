@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'; // Importez le fichier CSS pour les styles personnalisés
+import './App.css';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -43,11 +43,11 @@ function App() {
               
               {/* Contenu du produit */}
               <Card.Body className="d-flex flex-column">
-                <Card.Title className="fs-6 fw-bold product-title">{product.title}</Card.Title>
-                <Card.Text className="text-muted flex-grow-1 product-description">
+                <Card.Title className="fs-6 fw-bold">{product.title}</Card.Title>
+                <Card.Text className="text-muted flex-grow-1">
                   {product.description.length > 150 ? product.description.substring(0, 150) + '...' : product.description}
                 </Card.Text>
-                <Card.Text className="fw-bold product-price">
+                <Card.Text className="fw-bold">
                   {product.price} €
                 </Card.Text>
               </Card.Body>
