@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'; // Importez votre fichier CSS personnalisé
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -37,8 +38,7 @@ function App() {
               <Card.Img 
                 variant="top" 
                 src={product.image} 
-                className="p-3 img-fluid" 
-                style={{ objectFit: 'contain', height: '200px' }}
+                className="img-fluid product-image"
               />
               
               {/* Contenu du produit */}
