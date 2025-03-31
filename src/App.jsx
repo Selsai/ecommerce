@@ -10,15 +10,13 @@ function App() {
 
     // Fonction pour récupérer les produits
     const fetchProducts = async () => {
-        setLoading(true);
-        setError(null);
         try {
             const response = await fetch('https://fakestoreapi.com/products');
-            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+            if (!response.ok) throw new Error('Une erreur est survenue lors de la récupération des produits.');
             const data = await response.json();
             setProducts(data);
         } catch (err) {
-            setError(err.message);
+            setError('Impossible de récupérer les produits pour le moment. Veuillez réessayer plus tard.');
         } finally {
             setLoading(false);
         }
@@ -44,12 +42,12 @@ function App() {
                 body: JSON.stringify(newProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
+            if (!response.ok) throw new Error();
             const data = await response.json();
-            alert(`Le produit avec l'id ${data.id} a été créé.`);
+            alert(`Le produit a été ajouté avec succès.`);
             await fetchProducts();
         } catch (err) {
-            alert(`Erreur lors de la création du produit : ${err.message}`);
+            alert('Une erreur est survenue lors de l’ajout du produit. Veuillez réessayer.');
         }
     };
 
@@ -69,12 +67,11 @@ function App() {
                 body: JSON.stringify(updatedProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
-            const data = await response.json();
-            alert(`Le produit avec l'id ${data.id} a été modifié.`);
+            if (!response.ok) throw new Error();
+            alert(`Le produit a été modifié avec succès.`);
             await fetchProducts();
         } catch (err) {
-            alert(`Erreur lors de la modification du produit : ${err.message}`);
+            alert('Une erreur est survenue lors de la modification du produit. Veuillez réessayer.');
         }
     };
 
@@ -88,12 +85,11 @@ function App() {
                 body: JSON.stringify(updatedProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
-            const data = await response.json();
-            alert(`Le prix du produit avec l'id ${data.id} a été modifié.`);
+            if (!response.ok) throw new Error();
+            alert(`Le prix du produit a été modifié avec succès.`);
             await fetchProducts();
         } catch (err) {
-            alert(`Erreur lors de la modification du prix : ${err.message}`);
+            alert('Une erreur est survenue lors de la modification du prix. Veuillez réessayer.');
         }
     };
 
@@ -101,16 +97,16 @@ function App() {
     const handleDeleteProduct = async (id) => {
         try {
             const response = await fetch(`https://fakestoreapi.com/products/${id}`, { method: 'DELETE' });
-            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
-            alert(`Le produit avec l'id ${id} a été supprimé.`);
+            if (!response.ok) throw new Error();
+            alert(`Le produit a été supprimé avec succès.`);
             await fetchProducts();
         } catch (err) {
-            alert(`Erreur lors de la suppression du produit : ${err.message}`);
+            alert('Une erreur est survenue lors de la suppression du produit. Veuillez réessayer.');
         }
     };
 
     if (loading) return <div className="text-center mt-5">Chargement...</div>;
-    if (error) return <div className="text-center mt-5 text-danger">Erreur : {error}</div>;
+    if (error) return <div className="text-center mt-5 text-danger">{error}</div>;
 
     return (
         <Container className="d-flex flex-column align-items-center my-5">
