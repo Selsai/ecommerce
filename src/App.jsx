@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'; // Importez votre fichier CSS personnalisé
+import './App.css'; // Importez le fichier CSS pour les styles personnalisés
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -38,16 +38,16 @@ function App() {
               <Card.Img 
                 variant="top" 
                 src={product.image} 
-                className="img-fluid product-image"
+                className="product-image"
               />
               
               {/* Contenu du produit */}
               <Card.Body className="d-flex flex-column">
-                <Card.Title className="fs-6 fw-bold">{product.title}</Card.Title>
-                <Card.Text className="text-muted flex-grow-1">
+                <Card.Title className="fs-6 fw-bold product-title">{product.title}</Card.Title>
+                <Card.Text className="text-muted flex-grow-1 product-description">
                   {product.description.length > 150 ? product.description.substring(0, 150) + '...' : product.description}
                 </Card.Text>
-                <Card.Text className="fw-bold">
+                <Card.Text className="fw-bold product-price">
                   {product.price} €
                 </Card.Text>
               </Card.Body>
