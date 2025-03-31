@@ -56,6 +56,7 @@ function App() {
       alert('Erreur lors de la création du produit.');
     }
   };
+
   const handleUpdateProduct = async (id) => {
     const updatedProduct = {
       title: 'Produit Modifié',
@@ -84,6 +85,34 @@ function App() {
     } catch (err) {
       setError(err.message);
       alert('Erreur lors de la modification du produit.');
+    }
+  };
+
+  // Fonction pour modifier partiellement le prix d'un produit
+  const handleUpdatePrice = async (id) => {
+    const updatedProduct = {
+      price: 5, // Nouveau prix fixé à 5
+    };
+
+    try {
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(updatedProduct),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) throw new Error('Erreur lors de la modification du prix');
+
+      const data = await response.json();
+
+      alert(`Le prix du produit avec l'id ${data.id} a été modifié.`);
+      
+      await fetchProducts(); // Actualisation des produits après modification
+    } catch (err) {
+      setError(err.message);
+      alert('Erreur lors de la modification du prix.');
     }
   };
 
@@ -120,11 +149,20 @@ function App() {
                   {product.price} €
                 </Card.Text>
                 
-                {/* Bouton Modifier le produit */}
+                {/* Bouton Modifier le prix du produit */}
                 <Button 
                   variant="warning" 
-                  onClick={() => handleUpdateProduct(product.id)}
+                  onClick={() => handleUpdatePrice(product.id)}
                   className="mt-2"
+                >
+                  Modifier le prix du produit
+                </Button>
+                
+                {/* Bouton Modifier le produit complet */}
+                <Button 
+                  variant="light" 
+                  className="bg-yellow-light mt-2"
+                  onClick={() => handleUpdateProduct(product.id)}
                 >
                   Modifier le produit complet
                 </Button>
