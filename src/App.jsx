@@ -14,7 +14,7 @@ function App() {
         setError(null);
         try {
             const response = await fetch('https://fakestoreapi.com/products');
-            if (!response.ok) throw new Error('Erreur lors de la récupération des produits');
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             const data = await response.json();
             setProducts(data);
         } catch (err) {
@@ -30,98 +30,82 @@ function App() {
 
     // Fonction pour ajouter un produit
     const handleAddProduct = async () => {
-        setError(null);
-        try {
-            const newProduct = {
-                title: 'Produit Test',
-                price: 19.99,
-                description: 'Ceci est un produit de test créé via l\'API.',
-                image: 'https://via.placeholder.com/150',
-                category: 'test',
-            };
+        const newProduct = {
+            title: 'Produit Test',
+            price: 19.99,
+            description: 'Ceci est un produit de test créé via l\'API.',
+            image: 'https://via.placeholder.com/150',
+            category: 'test',
+        };
 
+        try {
             const response = await fetch('https://fakestoreapi.com/products', {
                 method: 'POST',
                 body: JSON.stringify(newProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-
-            if (!response.ok) throw new Error('Erreur lors de la création du produit');
-            
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             const data = await response.json();
             alert(`Le produit avec l'id ${data.id} a été créé.`);
             await fetchProducts();
         } catch (err) {
-            setError(err.message);
-            alert('Erreur : ' + err.message);
+            alert(`Erreur lors de la création du produit : ${err.message}`);
         }
     };
 
-    // Fonction pour modifier un produit
+    // Fonction pour modifier un produit complet
     const handleUpdateProduct = async (id) => {
-        setError(null);
-        try {
-            const updatedProduct = {
-                title: 'Produit Modifié',
-                price: 29.99,
-                description: 'Ceci est une description modifiée.',
-                image: 'https://via.placeholder.com/150',
-                category: 'modifié',
-            };
+        const updatedProduct = {
+            title: 'Produit Modifié',
+            price: 29.99,
+            description: 'Ceci est une description modifiée.',
+            image: 'https://via.placeholder.com/150',
+            category: 'modifié',
+        };
 
+        try {
             const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(updatedProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-
-            if (!response.ok) throw new Error('Erreur lors de la modification du produit');
-            
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             const data = await response.json();
             alert(`Le produit avec l'id ${data.id} a été modifié.`);
             await fetchProducts();
         } catch (err) {
-            setError(err.message);
-            alert('Erreur : ' + err.message);
+            alert(`Erreur lors de la modification du produit : ${err.message}`);
         }
     };
 
     // Fonction pour modifier partiellement le prix d'un produit
     const handleUpdatePrice = async (id) => {
-        setError(null);
-        try {
-            const updatedProduct = { price: 5 };
+        const updatedProduct = { price: 5 }; // Nouveau prix fixé à 5
 
+        try {
             const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify(updatedProduct),
                 headers: { 'Content-Type': 'application/json' },
             });
-
-            if (!response.ok) throw new Error('Erreur lors de la modification du prix');
-            
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             const data = await response.json();
             alert(`Le prix du produit avec l'id ${data.id} a été modifié.`);
             await fetchProducts();
         } catch (err) {
-            setError(err.message);
-            alert('Erreur : ' + err.message);
+            alert(`Erreur lors de la modification du prix : ${err.message}`);
         }
     };
 
     // Fonction pour supprimer un produit
     const handleDeleteProduct = async (id) => {
-        setError(null);
         try {
             const response = await fetch(`https://fakestoreapi.com/products/${id}`, { method: 'DELETE' });
-            
-            if (!response.ok) throw new Error('Erreur lors de la suppression du produit');
-            
+            if (!response.ok) throw new Error(`Erreur HTTP ${response.status} : ${response.statusText}`);
             alert(`Le produit avec l'id ${id} a été supprimé.`);
             await fetchProducts();
         } catch (err) {
-            setError(err.message);
-            alert('Erreur : ' + err.message);
+            alert(`Erreur lors de la suppression du produit : ${err.message}`);
         }
     };
 
@@ -135,7 +119,7 @@ function App() {
             <Button variant="primary" onClick={handleAddProduct} className="mb-3">
                 Ajouter un produit
             </Button>
-            
+
             {/* Grille des produits */}
             <Row className="g-4 justify-content-center">
                 {products.map(product => (
@@ -148,8 +132,6 @@ function App() {
                                     {product.description.length > 150 ? product.description.substring(0, 150) + '...' : product.description}
                                 </Card.Text>
                                 <Card.Text className="fw-bold">{product.price} €</Card.Text>
-
-                                {/* Boutons d'actions */}
                                 <Button variant="warning" onClick={() => handleUpdatePrice(product.id)} className="mt-2">
                                     Modifier le prix du produit
                                 </Button>
